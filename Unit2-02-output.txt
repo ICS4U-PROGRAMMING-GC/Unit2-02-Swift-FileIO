@@ -1,0 +1,4 @@
+60
+Error: apple is not a number
+-7
+0
