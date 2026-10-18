@@ -1,4 +1,1 @@
-60
-Error: apple is not a number
--7
-0
+The sum is 26

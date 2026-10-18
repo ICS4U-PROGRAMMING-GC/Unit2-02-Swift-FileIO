@@ -11,52 +11,36 @@
 
 import Foundation
 
-// File paths
-let inputPath = "Unit2-02-input.txt"
-let outputPath = "Unit2-02-output.txt"
+var sum = 0
+var error = false
+var errors = ""
 
 do {
-    // Read the input file into lines
-    let content = try String(contentsOfFile: inputPath, encoding: .utf8)
-    let lines = content.components(separatedBy: .newlines)
-    var results = [String]()
+    // Read the input file
+    let input = try String(contentsOfFile: "Unit2-02-input.txt")
+    let lines = input.components(separatedBy: .newlines)
 
-    // Process line by line
+    // Read each line
     for line in lines {
-        let trimmed = line.trimmingCharacters(in: .whitespaces)
-
-        // Handle empty line
-        if trimmed.isEmpty {
-            results.append("Error: No integers were found on this line.")
+        if line.isEmpty {
             continue
         }
 
-        // Split line into words
-        let tokens = trimmed.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
-        var sum = 0
-        var isValid = true
-
-        // Sum numbers or catch bad tokens
-        for token in tokens {
-            if let num = Int(token) {
-                sum += num
-            } else {
-                results.append("Error: \(token) is not a number")
-                isValid = false
-                break
-            }
-        }
-
-        // Save sum if no errors occurred
-        if isValid {
-            results.append("\(sum)")
+        if let number = Int(line.trimmingCharacters(in: .whitespacesAndNewlines)) {
+            sum += number
+        } else {
+            errors += line + " is not a valid int\n"
+            error = true
         }
     }
 
-    // Write all results to output file
-    try results.joined(separator: "\n").write(toFile: outputPath, atomically: true, encoding: .utf8)
-    print("Done! Output saved.")
+    // Write the result
+    if error {
+        try errors.write(toFile: "Unit2-02-output.txt", atomically: true, encoding: .utf8)
+    } else {
+        try "The sum is \(sum)".write(toFile: "Unit2-02-output.txt", atomically: true, encoding: .utf8)
+    }
 
 } catch {
-    print("Error reading or writing file: \(error)")
+    print("Error with the files.")
 }
